@@ -23,7 +23,7 @@ if(ARROW_COMPUTE)
   add_arrow_example(compute_register_example)
 endif()
 
-if(ARROW_SUBSTRAIT)
+if(ARROW_ACERO)
   add_arrow_example(engine_substrait_consumption EXTRA_LINK_LIBS arrow_substrait_shared)
 endif()
 

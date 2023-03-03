@@ -834,8 +834,8 @@ if(ARROW_COMPUTE)
   add_subdirectory(compute)
 endif()
 
-if(ARROW_SUBSTRAIT)
-  add_subdirectory(engine)
+if(ARROW_ACERO)
+  add_subdirectory(acero)
 endif()
 
 if(ARROW_CUDA)

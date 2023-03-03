@@ -1309,7 +1309,7 @@ class AsofJoinNode : public ExecNode {
   /// \brief Make the output schema of an as-of-join node
   ///
   /// Optionally, also provides the field output indices for this node.
-  /// \see arrow::engine::RelationInfo
+  /// \see arrow::acero::RelationInfo
   ///
   /// \param[in] input_schema the schema of each input to the node
   /// \param[in] indices_of_on_key the on-key index of each input to the node

@@ -366,7 +366,7 @@ if(ARROW_ORC OR ARROW_FLIGHT)
   set(ARROW_WITH_PROTOBUF ON)
 endif()
 
-if(ARROW_SUBSTRAIT)
+if(ARROW_ACERO)
   set(ARROW_WITH_PROTOBUF ON)
 endif()
 
@@ -1748,7 +1748,7 @@ if(ARROW_WITH_PROTOBUF)
   if(ARROW_FLIGHT_SQL)
     # Flight SQL uses proto3 optionals, which require 3.15 or later.
     set(ARROW_PROTOBUF_REQUIRED_VERSION "3.15.0")
-  elseif(ARROW_SUBSTRAIT)
+  elseif(ARROW_ACERO)
     # Substrait protobuf files use proto3 syntax
     set(ARROW_PROTOBUF_REQUIRED_VERSION "3.0.0")
   else()
@@ -1830,7 +1830,7 @@ if(ARROW_WITH_PROTOBUF)
 endif()
 
 # ----------------------------------------------------------------------
-# Substrait (required by compute engine)
+# Substrait (required by compute acero)
 
 macro(build_substrait)
   message(STATUS "Building Substrait from source")
@@ -1926,7 +1926,7 @@ macro(build_substrait)
   list(APPEND ARROW_BUNDLED_STATIC_LIBS substrait)
 endmacro()
 
-if(ARROW_SUBSTRAIT)
+if(ARROW_ACERO)
   # Currently, we can only build Substrait from source.
   set(Substrait_SOURCE "BUNDLED")
   resolve_dependency(Substrait)

@@ -49,7 +49,7 @@
 #cmakedefine ARROW_JSON
 #cmakedefine ARROW_ORC
 #cmakedefine ARROW_PARQUET
-#cmakedefine ARROW_SUBSTRAIT
+#cmakedefine ARROW_ACERO
 
 #cmakedefine ARROW_GCS
 #cmakedefine ARROW_S3

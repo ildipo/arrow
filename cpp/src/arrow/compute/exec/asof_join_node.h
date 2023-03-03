@@ -31,7 +31,7 @@ using AsofJoinKeys = AsofJoinNodeOptions::Keys;
 /// \brief Make the output schema of an as-of-join node
 ///
 /// Optionally, also provides the field output indices for this node.
-/// \see arrow::engine::RelationInfo
+/// \see arrow::acero::RelationInfo
 ///
 /// \param[in] input_schema the schema of each input to the node
 /// \param[in] input_keys the key of each input to the node

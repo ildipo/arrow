@@ -398,11 +398,10 @@ takes precedence over ccache if a storage backend is configured" ON)
                 ARROW_WITH_LZ4
                 ARROW_WITH_SNAPPY)
 
-  define_option(ARROW_SUBSTRAIT
-                "Build the Arrow Substrait Consumer Module"
+  define_option(ARROW_ACERO
+                "Build the Arrow Acero Module"
                 OFF
                 DEPENDS
-                ARROW_DATASET
                 ARROW_IPC
                 ARROW_PARQUET)
 

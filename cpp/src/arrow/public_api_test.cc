@@ -54,9 +54,9 @@
 #include "arrow/json/api.h"  // IWYU pragma: keep
 #endif
 
-#ifdef ARROW_SUBSTRAIT
-#include "arrow/engine/api.h"            // IWYU pragma: keep
-#include "arrow/engine/substrait/api.h"  // IWYU pragma: keep
+#ifdef ARROW_ACERO
+#include "arrow/acero/api.h"            // IWYU pragma: keep
+#include "arrow/acero/substrait/api.h"  // IWYU pragma: keep
 #endif
 
 #include <gmock/gmock-matchers.h>

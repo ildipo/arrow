@@ -60,7 +60,7 @@
  *
  * rather than:
  *
- *      pcg_detail::engine<
+ *      pcg_detail::acero<
  *          uint32_t,                                           // Output Type
  *          uint64_t,                                           // State Type
  *          pcg_detail::xsh_rr_mixin<uint32_t, uint64_t>, true, // Output Func

@@ -29,7 +29,6 @@ class ExecNodeOptions;
 class ExecFactoryRegistry;
 class QueryContext;
 struct QueryOptions;
-struct Declaration;
 class SinkNodeConsumer;
 
 }  // namespace compute

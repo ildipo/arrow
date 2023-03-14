@@ -349,7 +349,11 @@ TEST(ExecBatchBuilder, AppendValuesBeyondLimit) {
 
 TEST(KeyColumnArray, FromExecBatch) {
   ExecBatch batch =
+<<<<<<< HEAD
       JSONToExecBatch({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
+=======
+      ExecBatchFromJSON({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
+>>>>>>> fb20fd13a (some more cleanup and consolidation)
   std::vector<KeyColumnArray> arrays;
   ASSERT_OK(ColumnArraysFromExecBatch(batch, &arrays));
 
@@ -372,10 +376,17 @@ TEST(ExecBatchBuilder, AppendBatches) {
   std::unique_ptr<MemoryPool> owned_pool = MemoryPool::CreateDefault();
   MemoryPool* pool = owned_pool.get();
   ExecBatch batch_one =
+<<<<<<< HEAD
       JSONToExecBatch({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
   ExecBatch batch_two =
       JSONToExecBatch({int64(), boolean()}, "[[null, true], [5, true], [6, false]]");
   ExecBatch combined = JSONToExecBatch(
+=======
+      ExecBatchFromJSON({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
+  ExecBatch batch_two =
+      ExecBatchFromJSON({int64(), boolean()}, "[[null, true], [5, true], [6, false]]");
+  ExecBatch combined = ExecBatchFromJSON(
+>>>>>>> fb20fd13a (some more cleanup and consolidation)
       {int64(), boolean()},
       "[[1, true], [2, false], [null, null], [null, true], [5, true], [6, false]]");
   {
@@ -394,10 +405,17 @@ TEST(ExecBatchBuilder, AppendBatchesSomeRows) {
   std::unique_ptr<MemoryPool> owned_pool = MemoryPool::CreateDefault();
   MemoryPool* pool = owned_pool.get();
   ExecBatch batch_one =
+<<<<<<< HEAD
       JSONToExecBatch({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
   ExecBatch batch_two =
       JSONToExecBatch({int64(), boolean()}, "[[null, true], [5, true], [6, false]]");
   ExecBatch combined = JSONToExecBatch(
+=======
+      ExecBatchFromJSON({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
+  ExecBatch batch_two =
+      ExecBatchFromJSON({int64(), boolean()}, "[[null, true], [5, true], [6, false]]");
+  ExecBatch combined = ExecBatchFromJSON(
+>>>>>>> fb20fd13a (some more cleanup and consolidation)
       {int64(), boolean()}, "[[1, true], [2, false], [null, true], [5, true]]");
   {
     ExecBatchBuilder builder;
@@ -415,6 +433,7 @@ TEST(ExecBatchBuilder, AppendBatchesSomeCols) {
   std::unique_ptr<MemoryPool> owned_pool = MemoryPool::CreateDefault();
   MemoryPool* pool = owned_pool.get();
   ExecBatch batch_one =
+<<<<<<< HEAD
       JSONToExecBatch({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
   ExecBatch batch_two =
       JSONToExecBatch({int64(), boolean()}, "[[null, true], [5, true], [6, false]]");
@@ -422,6 +441,15 @@ TEST(ExecBatchBuilder, AppendBatchesSomeCols) {
       JSONToExecBatch({int64()}, "[[1], [2], [null], [null], [5], [6]]");
   ExecBatch last_col_only =
       JSONToExecBatch({boolean()}, "[[true], [false], [null], [true], [true], [false]]");
+=======
+      ExecBatchFromJSON({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
+  ExecBatch batch_two =
+      ExecBatchFromJSON({int64(), boolean()}, "[[null, true], [5, true], [6, false]]");
+  ExecBatch first_col_only =
+      ExecBatchFromJSON({int64()}, "[[1], [2], [null], [null], [5], [6]]");
+  ExecBatch last_col_only = ExecBatchFromJSON(
+      {boolean()}, "[[true], [false], [null], [true], [true], [false]]");
+>>>>>>> fb20fd13a (some more cleanup and consolidation)
   {
     ExecBatchBuilder builder;
     uint16_t row_ids[3] = {0, 1, 2};
@@ -463,12 +491,21 @@ TEST(ExecBatchBuilder, AppendNulls) {
   std::unique_ptr<MemoryPool> owned_pool = MemoryPool::CreateDefault();
   MemoryPool* pool = owned_pool.get();
   ExecBatch batch_one =
+<<<<<<< HEAD
       JSONToExecBatch({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
   ExecBatch combined = JSONToExecBatch(
       {int64(), boolean()},
       "[[1, true], [2, false], [null, null], [null, null], [null, null]]");
   ExecBatch just_nulls =
       JSONToExecBatch({int64(), boolean()}, "[[null, null], [null, null]]");
+=======
+      ExecBatchFromJSON({int64(), boolean()}, "[[1, true], [2, false], [null, null]]");
+  ExecBatch combined = ExecBatchFromJSON(
+      {int64(), boolean()},
+      "[[1, true], [2, false], [null, null], [null, null], [null, null]]");
+  ExecBatch just_nulls =
+      ExecBatchFromJSON({int64(), boolean()}, "[[null, null], [null, null]]");
+>>>>>>> fb20fd13a (some more cleanup and consolidation)
   {
     ExecBatchBuilder builder;
     uint16_t row_ids[3] = {0, 1, 2};

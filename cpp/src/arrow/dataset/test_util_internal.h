@@ -58,6 +58,7 @@
 #include "arrow/compute/kernel.h"
 #include "arrow/testing/visibility.h"
 #include "arrow/util/pcg_random.h"
+#include "arrow/util/vector.h"
 
 namespace arrow {
 

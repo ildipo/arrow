@@ -176,41 +176,75 @@ add_arrow_acero_test(util_test
         util_test.cc
         task_util_test.cc)
 
-add_arrow_benchmark(expression_benchmark
+if(ARROW_BUILD_BENCHMARKS)
+  add_arrow_benchmark(expression_benchmark
         PREFIX
-        "arrow-compute")
+        "arrow-acero"
+        SOURCES
+        test_util_internal.cc)
 
-add_arrow_benchmark(filter_benchmark
+  add_arrow_benchmark(filter_benchmark
         PREFIX
         "arrow-acero"
         SOURCES
         benchmark_util.cc
-        filter_benchmark.cc)
+        filter_benchmark.cc
+        SOURCES
+        test_util_internal.cc)
 
-add_arrow_benchmark(project_benchmark
+  add_arrow_benchmark(project_benchmark
         PREFIX
         "arrow-acero"
         SOURCES
         benchmark_util.cc
-        project_benchmark.cc)
+        project_benchmark.cc
+        SOURCES
+        test_util_internal.cc)
 
-add_arrow_benchmark(asof_join_benchmark
+  add_arrow_benchmark(asof_join_benchmark
         PREFIX
-        "arrow-acero")
+        "arrow-acero"
+        SOURCES
+        test_util_internal.cc)
 
-add_arrow_benchmark(tpch_benchmark
+  add_arrow_benchmark(tpch_benchmark
         PREFIX
-        "arrow-acero")
+        "arrow-acero"
+        SOURCES
+        test_util_internal.cc)
 
-if(ARROW_BUILD_OPENMP_BENCHMARKS)
-  find_package(OpenMP REQUIRED)
-  add_arrow_benchmark(hash_join_benchmark
+  if(ARROW_BUILD_OPENMP_BENCHMARKS)
+    find_package(OpenMP REQUIRED)
+    add_arrow_benchmark(hash_join_benchmark
           PREFIX
           "arrow-acero"
           EXTRA_LINK_LIBS
-          OpenMP::OpenMP_CXX)
-  if(MSVC)
-    target_compile_options(arrow-compute-hash-join-benchmark
-            PRIVATE "-openmp:experimental -openmp:llvm")
+          OpenMP::OpenMP_CXX
+          SOURCES
+          test_util_internal.cc)
+    if(MSVC)
+      target_compile_options(arrow-compute-hash-join-benchmark
+              PRIVATE "-openmp:experimental -openmp:llvm")
+    endif()
+  endif()
+
+  if(ARROW_BUILD_STATIC)
+    target_link_libraries(arrow-acero-expression-benchmark PUBLIC arrow_acero_static)
+    target_link_libraries(arrow-acero-filter-benchmark PUBLIC arrow_acero_static)
+    target_link_libraries(arrow-acero-project-benchmark PUBLIC arrow_acero_static)
+    target_link_libraries(arrow-acero-asof-join-benchmark PUBLIC arrow_acero_static)
+    target_link_libraries(arrow-acero-tpch-benchmark PUBLIC arrow_acero_static)
+    if(ARROW_BUILD_OPENMP_BENCHMARKS)
+      target_link_libraries(arrow-acero-hash-join-benchmark PUBLIC arrow_acero_static)
+    endif()
+  else()
+    target_link_libraries(arrow-acero-expression-benchmark PUBLIC arrow_acero_shared)
+    target_link_libraries(arrow-acero-filter-benchmark PUBLIC arrow_acero_shared)
+    target_link_libraries(arrow-acero-project-benchmark PUBLIC arrow_acero_shared)
+    target_link_libraries(arrow-acero-asof-join-benchmark PUBLIC arrow_acero_shared)
+    target_link_libraries(arrow-acero-tpch-benchmark PUBLIC arrow_acero_shared)
+    if(ARROW_BUILD_OPENMP_BENCHMARKS)
+      target_link_libraries(arrow-acero-hash-join-benchmark PUBLIC arrow_acero_shared)
+    endif()
   endif()
 endif()

@@ -28,7 +28,6 @@
 #include "arrow/compute/api_vector.h"
 #include "arrow/compute/cast.h"
 #include "arrow/acero/exec_plan.h"
-#include "arrow/acero/test_util_internal.h"
 #include "arrow/compute/expression_internal.h"
 #include "arrow/dataset/dataset_internal.h"
 #include "arrow/dataset/plan.h"

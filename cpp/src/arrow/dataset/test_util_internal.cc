@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#include "arrow/acero/test_util_internal.h"
+#include "arrow/dataset/test_util_internal.h"
 
 #include <gmock/gmock-matchers.h>
 #include <gtest/gtest.h>

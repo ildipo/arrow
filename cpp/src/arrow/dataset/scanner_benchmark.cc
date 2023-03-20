@@ -19,8 +19,8 @@
 
 #include "arrow/api.h"
 #include "arrow/compute/api.h"
-#include "arrow/compute/exec/options.h"
-#include "arrow/compute/exec/test_util.h"
+#include "arrow/acero/options.h"
+#include "arrow/acero/test_util_internal.h"
 #include "arrow/dataset/dataset.h"
 #include "arrow/dataset/plan.h"
 #include "arrow/dataset/scanner.h"

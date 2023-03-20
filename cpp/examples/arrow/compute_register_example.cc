@@ -17,8 +17,8 @@
 
 #include <arrow/api.h>
 #include <arrow/compute/api.h>
-#include <arrow/compute/exec/exec_plan.h>
-#include <arrow/compute/exec/options.h>
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/options.h"
 #include <arrow/util/async_generator.h>
 #include <arrow/util/future.h>
 #include "arrow/compute/expression.h"

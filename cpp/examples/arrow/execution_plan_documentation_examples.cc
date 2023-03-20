@@ -23,7 +23,7 @@
 #include <arrow/compute/api.h>
 #include <arrow/compute/api_vector.h>
 #include <arrow/compute/cast.h>
-#include <arrow/compute/exec/exec_plan.h>
+#include "arrow/acero/exec_plan.h"
 
 #include <arrow/csv/api.h>
 

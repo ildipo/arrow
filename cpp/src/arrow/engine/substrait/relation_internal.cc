@@ -29,8 +29,8 @@
 #include <vector>
 
 #include "arrow/compute/api_aggregate.h"
-#include "arrow/compute/exec/exec_plan.h"
-#include "arrow/compute/exec/options.h"
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/options.h"
 #include "arrow/compute/expression.h"
 #include "arrow/compute/kernel.h"
 #include "arrow/dataset/dataset.h"

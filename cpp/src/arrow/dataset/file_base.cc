@@ -17,7 +17,7 @@
 
 #include "arrow/dataset/file_base.h"
 
-#include <arrow/compute/exec/exec_plan.h>
+#include "arrow/acero/exec_plan.h"
 
 #include <algorithm>
 #include <atomic>
@@ -27,11 +27,11 @@
 #include <vector>
 
 #include "arrow/compute/api_scalar.h"
-#include "arrow/compute/exec/forest_internal.h"
-#include "arrow/compute/exec/map_node.h"
-#include "arrow/compute/exec/query_context.h"
-#include "arrow/compute/exec/subtree_internal.h"
-#include "arrow/compute/exec/util.h"
+#include "arrow/acero/forest_internal.h"
+#include "arrow/acero/map_node.h"
+#include "arrow/acero/query_context.h"
+#include "arrow/acero/subtree_internal.h"
+#include "arrow/acero/util.h"
 #include "arrow/dataset/dataset_internal.h"
 #include "arrow/dataset/dataset_writer.h"
 #include "arrow/dataset/scanner.h"

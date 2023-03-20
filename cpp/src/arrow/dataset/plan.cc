@@ -17,7 +17,7 @@
 
 #include "arrow/dataset/plan.h"
 
-#include "arrow/compute/exec/exec_plan.h"
+#include "arrow/acero/exec_plan.h"
 #include "arrow/dataset/file_base.h"
 #include "arrow/dataset/scanner.h"
 

@@ -25,7 +25,7 @@
 #include <utility>
 #include <vector>
 
-#include "arrow/compute/exec/options.h"
+#include "arrow/acero/options.h"
 #include "arrow/compute/expression.h"
 #include "arrow/compute/type_fwd.h"
 #include "arrow/dataset/dataset.h"

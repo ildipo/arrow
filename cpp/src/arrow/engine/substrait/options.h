@@ -23,8 +23,8 @@
 #include <string>
 #include <vector>
 
-#include "arrow/compute/exec/exec_plan.h"
-#include "arrow/compute/exec/options.h"
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/options.h"
 #include "arrow/compute/type_fwd.h"
 #include "arrow/engine/substrait/type_fwd.h"
 #include "arrow/engine/substrait/visibility.h"

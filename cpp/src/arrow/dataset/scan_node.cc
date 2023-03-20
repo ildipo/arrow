@@ -22,9 +22,9 @@
 #include <string>
 #include <vector>
 
-#include "arrow/compute/exec/exec_plan.h"
-#include "arrow/compute/exec/query_context.h"
-#include "arrow/compute/exec/util.h"
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/query_context.h"
+#include "arrow/acero/util.h"
 #include "arrow/compute/expression.h"
 #include "arrow/compute/expression_internal.h"
 #include "arrow/dataset/scanner.h"

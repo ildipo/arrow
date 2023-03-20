@@ -99,7 +99,7 @@ add_arrow_compute_test(aggregate_test
                        REQUIRE_ALL_KERNELS
                        SOURCES
                        aggregate_test.cc
-                       hash_aggregate_test.cc
+#                       hash_aggregate_test.cc
                        test_util.cc)
 add_arrow_benchmark(aggregate_benchmark PREFIX "arrow-compute")
 

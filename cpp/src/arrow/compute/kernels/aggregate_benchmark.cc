@@ -21,7 +21,7 @@
 
 #include "arrow/array/array_primitive.h"
 #include "arrow/compute/api.h"
-#include "arrow/compute/exec/groupby.h"
+//#include "arrow/acero/groupby.h"
 #include "arrow/table.h"
 #include "arrow/testing/gtest_util.h"
 #include "arrow/testing/random.h"

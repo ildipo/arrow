@@ -46,15 +46,19 @@ add_arrow_lib(arrow_substrait
               SHARED_LINK_FLAGS
               ${ARROW_VERSION_SCRIPT_FLAGS} # Defined in cpp/arrow/CMakeLists.txt
               SHARED_LINK_LIBS
+              arrow_acero_shared
               arrow_dataset_shared
               substrait
               SHARED_INSTALL_INTERFACE_LIBS
-              ArrowDataset::arrow_dataset_shared
+        ArrowAcero::arrow_acero_shared
+        ArrowDataset::arrow_dataset_shared
               STATIC_LINK_LIBS
-              arrow_dataset_static
+        arrow_acero_static
+        arrow_dataset_static
               substrait
               STATIC_INSTALL_INTERFACE_LIBS
-              ArrowDataset::arrow_dataset_static
+        ArrowAcero::arrow_acero_static
+        ArrowDataset::arrow_dataset_static
               PRIVATE_INCLUDES
               ${SUBSTRAIT_INCLUDES})
 
@@ -64,7 +68,7 @@ endforeach()
 
 set(ARROW_SUBSTRAIT_TEST_LINK_LIBS ${ARROW_SUBSTRAIT_LINK_lIBS} ${ARROW_TEST_LINK_LIBS})
 if(ARROW_TEST_LINKAGE STREQUAL "static")
-  list(APPEND ARROW_SUBSTRAIT_TEST_LINK_LIBS arrow_substrait_static)
+  list(APPEND ARROW_SUBSTRAIT_TEST_LINK_LIBS arrow_substrait_static arrow_substrait_static)
 else()
   list(APPEND ARROW_SUBSTRAIT_TEST_LINK_LIBS arrow_substrait_shared)
 endif()
@@ -75,6 +79,7 @@ add_arrow_test(substrait_test
                substrait/function_test.cc
                substrait/serde_test.cc
                substrait/protobuf_test_util.cc
+               substrait/test_util.cc
                EXTRA_LINK_LIBS
                ${ARROW_SUBSTRAIT_TEST_LINK_LIBS}
                PREFIX

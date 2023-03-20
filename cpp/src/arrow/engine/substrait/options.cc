@@ -20,8 +20,8 @@
 #include <google/protobuf/util/json_util.h>
 #include <mutex>
 
-#include "arrow/compute/exec/asof_join_node.h"
-#include "arrow/compute/exec/options.h"
+#include "arrow/acero/asof_join_node.h"
+#include "arrow/acero/options.h"
 #include "arrow/engine/substrait/expression_internal.h"
 #include "arrow/engine/substrait/options_internal.h"
 #include "arrow/engine/substrait/relation_internal.h"

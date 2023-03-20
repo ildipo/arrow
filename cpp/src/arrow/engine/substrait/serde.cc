@@ -31,8 +31,8 @@
 #include <google/protobuf/util/type_resolver_util.h>
 
 #include "arrow/buffer.h"
-#include "arrow/compute/exec/exec_plan.h"
-#include "arrow/compute/exec/options.h"
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/options.h"
 #include "arrow/compute/expression.h"
 #include "arrow/dataset/file_base.h"
 #include "arrow/engine/substrait/expression_internal.h"

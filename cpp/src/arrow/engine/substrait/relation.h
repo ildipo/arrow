@@ -19,7 +19,7 @@
 
 #include <memory>
 
-#include "arrow/compute/exec/exec_plan.h"
+#include "arrow/acero/exec_plan.h"
 #include "arrow/engine/substrait/visibility.h"
 #include "arrow/type_fwd.h"
 

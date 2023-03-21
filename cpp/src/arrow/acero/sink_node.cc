@@ -21,14 +21,14 @@
 #include <optional>
 #include <string_view>
 
-#include "arrow/compute/api_vector.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/accumulation_queue.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/order_by_impl.h"
 #include "arrow/acero/query_context.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/api_vector.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/exec_internal.h"
 #include "arrow/compute/expression.h"
 #include "arrow/datum.h"

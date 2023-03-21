@@ -28,12 +28,12 @@
 #include <gtest/gtest-matchers.h>
 #include <gtest/gtest.h>
 
-#include "arrow/array/builder_binary.h"
-#include "arrow/compute/api_vector.h"
-#include "arrow/compute/cast.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/util.h"
+#include "arrow/array/builder_binary.h"
+#include "arrow/compute/api_vector.h"
+#include "arrow/compute/cast.h"
 #include "arrow/datum.h"
 #include "arrow/engine/substrait/extension_set.h"
 #include "arrow/engine/substrait/options.h"

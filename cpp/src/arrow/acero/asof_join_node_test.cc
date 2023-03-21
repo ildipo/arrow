@@ -24,12 +24,12 @@
 #include <string_view>
 #include <unordered_set>
 
-#include "arrow/api.h"
-#include "arrow/compute/api_scalar.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/test_nodes.h"
 #include "arrow/acero/test_util_internal.h"
 #include "arrow/acero/util.h"
+#include "arrow/api.h"
+#include "arrow/compute/api_scalar.h"
 #include "arrow/compute/kernels/row_encoder_internal.h"
 #include "arrow/compute/kernels/test_util.h"
 #include "arrow/testing/gtest_util.h"

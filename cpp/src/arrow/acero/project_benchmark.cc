@@ -20,12 +20,12 @@
 
 #include "benchmark/benchmark.h"
 
-#include "arrow/compute/cast.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/benchmark_util.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/task_util.h"
 #include "arrow/acero/test_util_internal.h"
+#include "arrow/compute/cast.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/expression.h"
 #include "arrow/dataset/partition.h"
 #include "arrow/testing/future_util.h"

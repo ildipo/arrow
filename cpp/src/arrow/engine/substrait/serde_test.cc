@@ -28,16 +28,15 @@
 #include <gtest/gtest-matchers.h>
 #include <gtest/gtest.h>
 
-#include "arrow/buffer.h"
-#include "arrow/compute/api_scalar.h"
-#include "arrow/compute/api_vector.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/asof_join_node.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/map_node.h"
 #include "arrow/acero/options.h"
-#include "arrow/engine/substrait/test_util.h"
 #include "arrow/acero/util.h"
+#include "arrow/buffer.h"
+#include "arrow/compute/api_scalar.h"
+#include "arrow/compute/api_vector.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/expression.h"
 #include "arrow/compute/expression_internal.h"
 #include "arrow/compute/registry.h"
@@ -54,6 +53,7 @@
 #include "arrow/engine/substrait/extension_types.h"
 #include "arrow/engine/substrait/options.h"
 #include "arrow/engine/substrait/serde.h"
+#include "arrow/engine/substrait/test_util.h"
 #include "arrow/engine/substrait/util.h"
 #include "arrow/filesystem/filesystem.h"
 #include "arrow/filesystem/localfs.h"

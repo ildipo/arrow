@@ -23,10 +23,10 @@
 #include <string>
 #include <vector>
 
+#include "arrow/acero/type_fwd.h"
 #include "arrow/compute/api_aggregate.h"
 #include "arrow/compute/api_vector.h"
 #include "arrow/compute/exec.h"
-#include "arrow/acero/type_fwd.h"
 #include "arrow/compute/expression.h"
 #include "arrow/record_batch.h"
 #include "arrow/result.h"

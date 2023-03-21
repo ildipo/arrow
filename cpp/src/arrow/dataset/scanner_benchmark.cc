@@ -17,9 +17,9 @@
 
 #include "benchmark/benchmark.h"
 
+#include "arrow/acero/options.h"
 #include "arrow/api.h"
 #include "arrow/compute/api.h"
-#include "arrow/acero/options.h"
 #include "arrow/dataset/dataset.h"
 #include "arrow/dataset/plan.h"
 #include "arrow/dataset/scanner.h"

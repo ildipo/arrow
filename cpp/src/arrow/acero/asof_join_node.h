@@ -17,8 +17,8 @@
 
 #include <vector>
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/options.h"
+#include "arrow/compute/exec.h"
 #include "arrow/type.h"
 #include "arrow/util/visibility.h"
 

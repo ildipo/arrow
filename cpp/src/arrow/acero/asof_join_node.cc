@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#include "asof_join_node.h"
+#include "arrow/acero/asof_join_node.h"
 
 #include <condition_variable>
 #include <limits>
@@ -27,13 +27,13 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "arrow/array/builder_binary.h"
-#include "arrow/array/builder_primitive.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/query_context.h"
 #include "arrow/acero/schema_util.h"
 #include "arrow/acero/util.h"
+#include "arrow/array/builder_binary.h"
+#include "arrow/array/builder_primitive.h"
 #include "arrow/compute/key_hash.h"
 #include "arrow/compute/light_array.h"
 #include "arrow/record_batch.h"

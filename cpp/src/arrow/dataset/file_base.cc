@@ -26,12 +26,12 @@
 #include <variant>
 #include <vector>
 
-#include "arrow/compute/api_scalar.h"
 #include "arrow/acero/forest_internal.h"
 #include "arrow/acero/map_node.h"
 #include "arrow/acero/query_context.h"
 #include "arrow/acero/subtree_internal.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/api_scalar.h"
 #include "arrow/dataset/dataset_internal.h"
 #include "arrow/dataset/dataset_writer.h"
 #include "arrow/dataset/scanner.h"

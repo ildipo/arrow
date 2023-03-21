@@ -21,11 +21,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/query_context.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/exec_internal.h"
 #include "arrow/compute/registry.h"
 #include "arrow/compute/row/grouper.h"

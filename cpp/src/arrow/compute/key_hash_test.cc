@@ -21,8 +21,8 @@
 #include <map>
 #include <unordered_set>
 #include "arrow/array/builder_binary.h"
-#include "arrow/testing/gtest_util.h"
 #include "arrow/compute/key_hash.h"
+#include "arrow/testing/gtest_util.h"
 #include "arrow/util/cpu_info.h"
 #include "arrow/util/pcg_random.h"
 

@@ -20,10 +20,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <mutex>
-#include "arrow/array/util.h"  // MakeArrayFromScalar
 #include "arrow/acero/hash_join.h"
 #include "arrow/acero/swiss_join_internal.h"
 #include "arrow/acero/util.h"
+#include "arrow/array/util.h"  // MakeArrayFromScalar
 #include "arrow/compute/kernels/row_encoder_internal.h"
 #include "arrow/compute/key_hash.h"
 #include "arrow/compute/row/compare_internal.h"

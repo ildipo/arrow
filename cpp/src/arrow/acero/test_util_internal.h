@@ -26,8 +26,8 @@
 #include <string_view>
 #include <vector>
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/kernel.h"
 #include "arrow/testing/visibility.h"
 #include "arrow/util/async_generator.h"

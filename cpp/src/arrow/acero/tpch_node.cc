@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#include "tpch_node.h"
+#include "arrow/acero/tpch_node.h"
 
 #include <algorithm>
 #include <bitset>
@@ -28,10 +28,10 @@
 #include <unordered_set>
 #include <vector>
 
-#include "arrow/buffer.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/query_context.h"
+#include "arrow/buffer.h"
+#include "arrow/compute/exec.h"
 #include "arrow/datum.h"
 #include "arrow/util/async_util.h"
 #include "arrow/util/formatting.h"

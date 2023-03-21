@@ -20,12 +20,12 @@
 #include <functional>
 #include <memory>
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/test_nodes.h"
 #include "arrow/acero/test_util_internal.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/expression.h"
 #include "arrow/io/util_internal.h"
 #include "arrow/record_batch.h"

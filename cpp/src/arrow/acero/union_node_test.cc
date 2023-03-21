@@ -18,9 +18,9 @@
 #include <gmock/gmock-matchers.h>
 #include <random>
 
-#include "arrow/api.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/test_util_internal.h"
+#include "arrow/api.h"
 #include "arrow/testing/gtest_util.h"
 #include "arrow/testing/matchers.h"
 #include "arrow/testing/random.h"

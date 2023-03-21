@@ -15,12 +15,12 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#include "arrow/compute/api_vector.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/map_node.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/query_context.h"
+#include "arrow/compute/api_vector.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/expression.h"
 #include "arrow/datum.h"
 #include "arrow/result.h"

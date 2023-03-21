@@ -31,11 +31,11 @@
 #include <utility>
 #include <vector>
 
-#include "arrow/compute/api_vector.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/api_vector.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/function_internal.h"
 #include "arrow/datum.h"
 #include "arrow/io/interfaces.h"
@@ -56,135 +56,141 @@ namespace arrow {
 using internal::Executor;
 
 namespace compute {
-//namespace {
+// namespace {
 //
-//struct DummyNode : ExecNode {
-//  DummyNode(ExecPlan* plan, NodeVector inputs, bool is_sink,
-//            StartProducingFunc start_producing, StopProducingFunc stop_producing)
-//      : ExecNode(plan, std::move(inputs), {}, (is_sink) ? nullptr : dummy_schema()),
-//        start_producing_(std::move(start_producing)),
-//        stop_producing_(std::move(stop_producing)) {
-//    input_labels_.resize(inputs_.size());
-//    for (size_t i = 0; i < input_labels_.size(); ++i) {
-//      input_labels_[i] = std::to_string(i);
-//    }
-//  }
+// struct DummyNode : ExecNode {
+//   DummyNode(ExecPlan* plan, NodeVector inputs, bool is_sink,
+//             StartProducingFunc start_producing, StopProducingFunc stop_producing)
+//       : ExecNode(plan, std::move(inputs), {}, (is_sink) ? nullptr : dummy_schema()),
+//         start_producing_(std::move(start_producing)),
+//         stop_producing_(std::move(stop_producing)) {
+//     input_labels_.resize(inputs_.size());
+//     for (size_t i = 0; i < input_labels_.size(); ++i) {
+//       input_labels_[i] = std::to_string(i);
+//     }
+//   }
 //
-//  const char* kind_name() const override { return "Dummy"; }
+//   const char* kind_name() const override { return "Dummy"; }
 //
-//  Status InputReceived(ExecNode* input, ExecBatch batch) override { return Status::OK(); }
+//   Status InputReceived(ExecNode* input, ExecBatch batch) override { return
+//   Status::OK(); }
 //
-//  Status InputFinished(ExecNode* input, int total_batches) override {
-//    return Status::OK();
-//  }
+//   Status InputFinished(ExecNode* input, int total_batches) override {
+//     return Status::OK();
+//   }
 //
-//  Status StartProducing() override {
-//    if (start_producing_) {
-//      RETURN_NOT_OK(start_producing_(this));
-//    }
-//    started_ = true;
-//    return Status::OK();
-//  }
+//   Status StartProducing() override {
+//     if (start_producing_) {
+//       RETURN_NOT_OK(start_producing_(this));
+//     }
+//     started_ = true;
+//     return Status::OK();
+//   }
 //
-//  void PauseProducing(ExecNode* output, int32_t counter) override {
-//    ASSERT_NE(output_, nullptr) << "Sink nodes should not experience backpressure";
-//    AssertIsOutput(output);
-//  }
+//   void PauseProducing(ExecNode* output, int32_t counter) override {
+//     ASSERT_NE(output_, nullptr) << "Sink nodes should not experience backpressure";
+//     AssertIsOutput(output);
+//   }
 //
-//  void ResumeProducing(ExecNode* output, int32_t counter) override {
-//    ASSERT_NE(output_, nullptr) << "Sink nodes should not experience backpressure";
-//    AssertIsOutput(output);
-//  }
+//   void ResumeProducing(ExecNode* output, int32_t counter) override {
+//     ASSERT_NE(output_, nullptr) << "Sink nodes should not experience backpressure";
+//     AssertIsOutput(output);
+//   }
 //
-//  Status StopProducingImpl() override {
-//    if (stop_producing_) {
-//      stop_producing_(this);
-//    }
-//    return Status::OK();
-//  }
+//   Status StopProducingImpl() override {
+//     if (stop_producing_) {
+//       stop_producing_(this);
+//     }
+//     return Status::OK();
+//   }
 //
-// private:
-//  void AssertIsOutput(ExecNode* output) { ASSERT_EQ(output->output(), nullptr); }
+//  private:
+//   void AssertIsOutput(ExecNode* output) { ASSERT_EQ(output->output(), nullptr); }
 //
-//  std::shared_ptr<Schema> dummy_schema() const {
-//    return schema({field("dummy", null())});
-//  }
+//   std::shared_ptr<Schema> dummy_schema() const {
+//     return schema({field("dummy", null())});
+//   }
 //
-//  StartProducingFunc start_producing_;
-//  StopProducingFunc stop_producing_;
-//  std::unordered_set<ExecNode*> requested_stop_;
-//  bool started_ = false;
-//};
+//   StartProducingFunc start_producing_;
+//   StopProducingFunc stop_producing_;
+//   std::unordered_set<ExecNode*> requested_stop_;
+//   bool started_ = false;
+// };
 //
-//}  // namespace
+// }  // namespace
 //
-//ExecNode* MakeDummyNode(ExecPlan* plan, std::string label, std::vector<ExecNode*> inputs,
-//                        bool is_sink, StartProducingFunc start_producing,
-//                        StopProducingFunc stop_producing) {
-//  auto node =
-//      plan->EmplaceNode<DummyNode>(plan, std::move(inputs), is_sink,
-//                                   std::move(start_producing), std::move(stop_producing));
-//  if (!label.empty()) {
-//    node->SetLabel(std::move(label));
-//  }
-//  return node;
-//}
+// ExecNode* MakeDummyNode(ExecPlan* plan, std::string label, std::vector<ExecNode*>
+// inputs,
+//                         bool is_sink, StartProducingFunc start_producing,
+//                         StopProducingFunc stop_producing) {
+//   auto node =
+//       plan->EmplaceNode<DummyNode>(plan, std::move(inputs), is_sink,
+//                                    std::move(start_producing),
+//                                    std::move(stop_producing));
+//   if (!label.empty()) {
+//     node->SetLabel(std::move(label));
+//   }
+//   return node;
+// }
 //
-//ExecBatch ExecBatchFromJSON(const std::vector<TypeHolder>& types, std::string_view json) {
-//  auto fields = ::arrow::internal::MapVector(
-//      [](const TypeHolder& th) { return field("", th.GetSharedPtr()); }, types);
+// ExecBatch ExecBatchFromJSON(const std::vector<TypeHolder>& types, std::string_view
+// json) {
+//   auto fields = ::arrow::internal::MapVector(
+//       [](const TypeHolder& th) { return field("", th.GetSharedPtr()); }, types);
 //
-//  ExecBatch batch{*RecordBatchFromJSON(schema(std::move(fields)), json)};
+//   ExecBatch batch{*RecordBatchFromJSON(schema(std::move(fields)), json)};
 //
-//  return batch;
-//}
+//   return batch;
+// }
 //
-//ExecBatch ExecBatchFromJSON(const std::vector<TypeHolder>& types,
-//                            const std::vector<ArgShape>& shapes, std::string_view json) {
-//  DCHECK_EQ(types.size(), shapes.size());
+// ExecBatch ExecBatchFromJSON(const std::vector<TypeHolder>& types,
+//                             const std::vector<ArgShape>& shapes, std::string_view json)
+//                             {
+//   DCHECK_EQ(types.size(), shapes.size());
 //
-//  ExecBatch batch = ExecBatchFromJSON(types, json);
+//   ExecBatch batch = ExecBatchFromJSON(types, json);
 //
-//  auto value_it = batch.values.begin();
-//  for (ArgShape shape : shapes) {
-//    if (shape == ArgShape::SCALAR) {
-//      if (batch.length == 0) {
-//        *value_it = MakeNullScalar(value_it->type());
-//      } else {
-//        *value_it = value_it->make_array()->GetScalar(0).ValueOrDie();
-//      }
-//    }
-//    ++value_it;
-//  }
+//   auto value_it = batch.values.begin();
+//   for (ArgShape shape : shapes) {
+//     if (shape == ArgShape::SCALAR) {
+//       if (batch.length == 0) {
+//         *value_it = MakeNullScalar(value_it->type());
+//       } else {
+//         *value_it = value_it->make_array()->GetScalar(0).ValueOrDie();
+//       }
+//     }
+//     ++value_it;
+//   }
 //
-//  return batch;
-//}
+//   return batch;
+// }
 //
-//Future<> StartAndFinish(ExecPlan* plan) {
-//  RETURN_NOT_OK(plan->Validate());
-//  plan->StartProducing();
-//  return plan->finished();
-//}
+// Future<> StartAndFinish(ExecPlan* plan) {
+//   RETURN_NOT_OK(plan->Validate());
+//   plan->StartProducing();
+//   return plan->finished();
+// }
 //
-//Future<std::vector<ExecBatch>> StartAndCollect(
-//    ExecPlan* plan, AsyncGenerator<std::optional<ExecBatch>> gen) {
-//  RETURN_NOT_OK(plan->Validate());
-//  plan->StartProducing();
+// Future<std::vector<ExecBatch>> StartAndCollect(
+//     ExecPlan* plan, AsyncGenerator<std::optional<ExecBatch>> gen) {
+//   RETURN_NOT_OK(plan->Validate());
+//   plan->StartProducing();
 //
-//  auto collected_fut = CollectAsyncGenerator(gen);
+//   auto collected_fut = CollectAsyncGenerator(gen);
 //
-//  return AllFinished({plan->finished(), Future<>(collected_fut)})
-//      .Then([collected_fut]() -> Result<std::vector<ExecBatch>> {
-//        ARROW_ASSIGN_OR_RAISE(auto collected, collected_fut.result());
-//        return ::arrow::internal::MapVector(
-//            [](std::optional<ExecBatch> batch) { return batch.value_or(ExecBatch()); },
-//            std::move(collected));
-//      });
-//}
+//   return AllFinished({plan->finished(), Future<>(collected_fut)})
+//       .Then([collected_fut]() -> Result<std::vector<ExecBatch>> {
+//         ARROW_ASSIGN_OR_RAISE(auto collected, collected_fut.result());
+//         return ::arrow::internal::MapVector(
+//             [](std::optional<ExecBatch> batch) { return batch.value_or(ExecBatch()); },
+//             std::move(collected));
+//       });
+// }
 
 namespace {
 //
-//Result<ExecBatch> MakeIntegerBatch(const std::vector<std::function<int64_t(int)>>& gens,
+// Result<ExecBatch> MakeIntegerBatch(const std::vector<std::function<int64_t(int)>>&
+// gens,
 //                                   const std::shared_ptr<Schema>& schema,
 //                                   int batch_start_row, int batch_size) {
 //  int n_fields = schema->num_fields();
@@ -231,21 +237,22 @@ namespace {
 
 }  // namespace
 //
-//AsyncGenerator<std::optional<ExecBatch>> MakeIntegerBatchGen(
+// AsyncGenerator<std::optional<ExecBatch>> MakeIntegerBatchGen(
 //    const std::vector<std::function<int64_t(int)>>& gens,
 //    const std::shared_ptr<Schema>& schema, int num_batches, int batch_size) {
 //  struct IntegerBatchGenState {
 //    IntegerBatchGenState(const std::vector<std::function<int64_t(int)>>& gens,
 //                         const std::shared_ptr<Schema>& schema, int num_batches,
 //                         int batch_size)
-//        : gens(gens), schema(schema), num_batches(num_batches), batch_size(batch_size) {}
+//        : gens(gens), schema(schema), num_batches(num_batches), batch_size(batch_size)
+//        {}
 //
 //    std::optional<ExecBatch> Next() {
 //      if (batch_index >= num_batches) {
 //        return std::nullopt;
 //      }
-//      Result<ExecBatch> batch_res = MakeIntegerBatch(gens, schema, batch_row, batch_size);
-//      if (!batch_res.ok()) {
+//      Result<ExecBatch> batch_res = MakeIntegerBatch(gens, schema, batch_row,
+//      batch_size); if (!batch_res.ok()) {
 //        return std::nullopt;
 //      }
 //      ++batch_index;
@@ -268,7 +275,7 @@ namespace {
 //  };
 //}
 //
-//BatchesWithSchema MakeBasicBatches() {
+// BatchesWithSchema MakeBasicBatches() {
 //  BatchesWithSchema out;
 //  out.batches = {
 //      ExecBatchFromJSON({int32(), boolean()}, "[[null, true], [4, false]]"),
@@ -277,7 +284,7 @@ namespace {
 //  return out;
 //}
 //
-//BatchesWithSchema MakeNestedBatches() {
+// BatchesWithSchema MakeNestedBatches() {
 //  auto ty = struct_({field("i32", int32()), field("bool", boolean())});
 //  BatchesWithSchema out;
 //  out.batches = {
@@ -286,12 +293,13 @@ namespace {
 //          R"([[{"i32": null, "bool": true}], [{"i32": 4, "bool": false}], [null]])"),
 //      ExecBatchFromJSON(
 //          {ty},
-//          R"([[{"i32": 5, "bool": null}], [{"i32": 6, "bool": false}], [{"i32": 7, "bool": false}]])")};
+//          R"([[{"i32": 5, "bool": null}], [{"i32": 6, "bool": false}], [{"i32": 7,
+//          "bool": false}]])")};
 //  out.schema = schema({field("struct", ty)});
 //  return out;
 //}
 //
-//BatchesWithSchema MakeRandomBatches(const std::shared_ptr<Schema>& schema,
+// BatchesWithSchema MakeRandomBatches(const std::shared_ptr<Schema>& schema,
 //                                    int num_batches, int batch_size, int64_t alignment,
 //                                    MemoryPool* memory_pool) {
 //  BatchesWithSchema out;
@@ -308,7 +316,7 @@ namespace {
 //  return out;
 //}
 //
-//Result<BatchesWithSchema> MakeIntegerBatches(
+// Result<BatchesWithSchema> MakeIntegerBatches(
 //    const std::vector<std::function<int64_t(int)>>& gens,
 //    const std::shared_ptr<Schema>& schema, int num_batches, int batch_size) {
 //  BatchesWithSchema out;
@@ -322,9 +330,9 @@ namespace {
 //  return out;
 //}
 //
-//BatchesWithSchema MakeBatchesFromString(const std::shared_ptr<Schema>& schema,
-//                                        const std::vector<std::string_view>& json_strings,
-//                                        int multiplicity) {
+// BatchesWithSchema MakeBatchesFromString(const std::shared_ptr<Schema>& schema,
+//                                        const std::vector<std::string_view>&
+//                                        json_strings, int multiplicity) {
 //  BatchesWithSchema out_batches{{}, schema};
 //
 //  std::vector<TypeHolder> types;
@@ -346,7 +354,7 @@ namespace {
 //  return out_batches;
 //}
 //
-//Result<std::vector<std::shared_ptr<ArrayVector>>> ToArrayVectors(
+// Result<std::vector<std::shared_ptr<ArrayVector>>> ToArrayVectors(
 //    const BatchesWithSchema& batches_with_schema) {
 //  std::vector<std::shared_ptr<ArrayVector>> arrayvecs;
 //  for (auto batch : batches_with_schema.batches) {
@@ -357,7 +365,7 @@ namespace {
 //  return arrayvecs;
 //}
 //
-//Result<std::vector<std::shared_ptr<ExecBatch>>> ToExecBatches(
+// Result<std::vector<std::shared_ptr<ExecBatch>>> ToExecBatches(
 //    const BatchesWithSchema& batches_with_schema) {
 //  std::vector<std::shared_ptr<ExecBatch>> exec_batches;
 //  for (auto batch : batches_with_schema.batches) {
@@ -366,7 +374,7 @@ namespace {
 //  return exec_batches;
 //}
 //
-//Result<std::vector<std::shared_ptr<RecordBatch>>> ToRecordBatches(
+// Result<std::vector<std::shared_ptr<RecordBatch>>> ToRecordBatches(
 //    const BatchesWithSchema& batches_with_schema) {
 //  std::vector<std::shared_ptr<RecordBatch>> record_batches;
 //  for (auto batch : batches_with_schema.batches) {
@@ -377,17 +385,18 @@ namespace {
 //  return record_batches;
 //}
 
-//Result<std::shared_ptr<RecordBatchReader>> ToRecordBatchReader(
-//    const BatchesWithSchema& batches_with_schema) {
-//  std::vector<std::shared_ptr<RecordBatch>> record_batches;
-//  for (auto batch : batches_with_schema.batches) {
-//    ARROW_ASSIGN_OR_RAISE(auto record_batch,
-//                          batch.ToRecordBatch(batches_with_schema.schema));
-//    record_batches.push_back(std::move(record_batch));
-//  }
-//  ARROW_ASSIGN_OR_RAISE(auto table, Table::FromRecordBatches(std::move(record_batches)));
-//  return std::make_shared<arrow::TableBatchReader>(std::move(table));
-//}
+// Result<std::shared_ptr<RecordBatchReader>> ToRecordBatchReader(
+//     const BatchesWithSchema& batches_with_schema) {
+//   std::vector<std::shared_ptr<RecordBatch>> record_batches;
+//   for (auto batch : batches_with_schema.batches) {
+//     ARROW_ASSIGN_OR_RAISE(auto record_batch,
+//                           batch.ToRecordBatch(batches_with_schema.schema));
+//     record_batches.push_back(std::move(record_batch));
+//   }
+//   ARROW_ASSIGN_OR_RAISE(auto table,
+//   Table::FromRecordBatches(std::move(record_batches))); return
+//   std::make_shared<arrow::TableBatchReader>(std::move(table));
+// }
 //
 Result<std::shared_ptr<Table>> SortTableOnAllFields(const std::shared_ptr<Table>& tab) {
   std::vector<SortKey> sort_keys;
@@ -588,7 +597,7 @@ void PrintTo(const Declaration& decl, std::ostream* os) {
   *os << "}";
 }
 //
-//Result<std::shared_ptr<Table>> MakeRandomTimeSeriesTable(
+// Result<std::shared_ptr<Table>> MakeRandomTimeSeriesTable(
 //    const TableGenerationProperties& properties) {
 //  int total_columns = properties.num_columns + 2;
 //  std::vector<std::shared_ptr<Array>> columns;
@@ -619,7 +628,8 @@ void PrintTo(const Declaration& decl, std::ostream* os) {
 //        field(properties.column_prefix + std::to_string(i), float64()));
 //    random::RandomArrayGenerator rand(properties.seed + i);
 //    columns.push_back(
-//        rand.Float64(num_rows, properties.min_column_value, properties.max_column_value));
+//        rand.Float64(num_rows, properties.min_column_value,
+//        properties.max_column_value));
 //  }
 //  std::shared_ptr<arrow::Schema> schema = arrow::schema(std::move(field_vector));
 //  return Table::Make(schema, columns, num_rows);

@@ -23,11 +23,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/query_context.h"
 #include "arrow/acero/task_util.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/expression.h"
 #include "arrow/compute/registry.h"
 #include "arrow/datum.h"

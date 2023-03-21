@@ -22,10 +22,10 @@
 #include <string_view>
 #include <utility>
 
-#include "arrow/buffer.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
+#include "arrow/buffer.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/type_fwd.h"
 #include "arrow/engine/substrait/extension_set.h"
 #include "arrow/engine/substrait/relation.h"

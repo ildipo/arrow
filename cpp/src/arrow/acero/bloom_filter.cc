@@ -17,9 +17,9 @@
 
 #include "arrow/acero/bloom_filter.h"
 #include <random>
-#include "arrow/acero/util.h"  // PREFETCH
-#include "arrow/util/bit_util.h"      // Log2
-#include "arrow/util/bitmap_ops.h"    // CountSetBits
+#include "arrow/acero/util.h"       // PREFETCH
+#include "arrow/util/bit_util.h"    // Log2
+#include "arrow/util/bitmap_ops.h"  // CountSetBits
 
 namespace arrow {
 namespace compute {

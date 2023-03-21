@@ -31,9 +31,11 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "arrow/array.h"
 #include "arrow/acero/exec_plan.h"
+#include "arrow/array.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/expression.h"
+#include "arrow/compute/kernel.h"
 #include "arrow/dataset/dataset_internal.h"
 #include "arrow/dataset/discovery.h"
 #include "arrow/dataset/file_base.h"
@@ -48,16 +50,13 @@
 #include "arrow/testing/gtest_util.h"
 #include "arrow/testing/matchers.h"
 #include "arrow/testing/random.h"
+#include "arrow/testing/visibility.h"
 #include "arrow/util/async_generator.h"
 #include "arrow/util/io_util.h"
 #include "arrow/util/iterator.h"
 #include "arrow/util/logging.h"
-#include "arrow/util/thread_pool.h"
-#include "arrow/compute/exec.h"
-#include "arrow/acero/exec_plan.h"
-#include "arrow/compute/kernel.h"
-#include "arrow/testing/visibility.h"
 #include "arrow/util/pcg_random.h"
+#include "arrow/util/thread_pool.h"
 #include "arrow/util/vector.h"
 
 namespace arrow {
@@ -103,7 +102,7 @@ struct BatchesWithSchema {
       // emulate batches completing initial decode-after-scan on a cpu thread
       gen = MakeBackgroundGenerator(MakeVectorIterator(std::move(opt_batches)),
                                     ::arrow::internal::GetCpuThreadPool())
-          .ValueOrDie();
+                .ValueOrDie();
 
       // ensure that callbacks are not executed immediately on a background thread
       gen =

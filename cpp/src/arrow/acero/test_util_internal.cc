@@ -31,11 +31,11 @@
 #include <utility>
 #include <vector>
 
-#include "arrow/compute/api_vector.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/api_vector.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/function_internal.h"
 #include "arrow/datum.h"
 #include "arrow/io/interfaces.h"

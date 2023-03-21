@@ -400,20 +400,20 @@ takes precedence over ccache if a storage backend is configured" ON)
                 ARROW_WITH_SNAPPY)
 
   define_option(ARROW_SUBSTRAIT
-          "Build the Arrow Substrait Consumer Module"
-          OFF
-          DEPENDS
-          ARROW_DATASET
-          ARROW_IPC
-          ARROW_PARQUET)
+                "Build the Arrow Substrait Consumer Module"
+                OFF
+                DEPENDS
+                ARROW_DATASET
+                ARROW_IPC
+                ARROW_PARQUET)
 
   define_option(ARROW_ACERO
-          "Build the Arrow Acero Engine Module"
-          OFF
-          DEPENDS
-          ARROW_COMPUTE
-          ARROW_IPC
-          ARROW_PARQUET)
+                "Build the Arrow Acero Engine Module"
+                OFF
+                DEPENDS
+                ARROW_COMPUTE
+                ARROW_IPC
+                ARROW_PARQUET)
 
   define_option(ARROW_TENSORFLOW "Build Arrow with TensorFlow support enabled" OFF)
 

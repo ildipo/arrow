@@ -20,8 +20,8 @@
 #include <memory>
 #include <unordered_map>
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/schema_util.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/kernels/row_encoder_internal.h"
 #include "arrow/result.h"
 #include "arrow/status.h"

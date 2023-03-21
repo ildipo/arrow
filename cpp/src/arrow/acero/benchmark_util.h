@@ -23,9 +23,9 @@
 
 #include "benchmark/benchmark.h"
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/test_util_internal.h"
+#include "arrow/compute/exec.h"
 
 namespace arrow {
 

@@ -18,10 +18,10 @@
 
 #include <string_view>
 
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/task_util.h"
 #include "arrow/acero/util.h"
+#include "arrow/compute/exec.h"
 #include "arrow/io/interfaces.h"
 #include "arrow/util/async_util.h"
 #include "arrow/util/type_fwd.h"

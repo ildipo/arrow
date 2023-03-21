@@ -19,8 +19,8 @@
 
 #include <thread>
 
-#include "arrow/compute/cast.h"
 #include "arrow/acero/test_util_internal.h"
+#include "arrow/compute/cast.h"
 #include "arrow/compute/expression.h"
 #include "arrow/dataset/partition.h"
 #include "arrow/testing/generator.h"

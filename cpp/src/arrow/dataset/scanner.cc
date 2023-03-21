@@ -25,15 +25,15 @@
 #include <set>
 #include <sstream>
 
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/options.h"
+#include "arrow/acero/query_context.h"
 #include "arrow/array/array_primitive.h"
 #include "arrow/array/util.h"
 #include "arrow/compute/api_aggregate.h"
 #include "arrow/compute/api_scalar.h"
 #include "arrow/compute/api_vector.h"
 #include "arrow/compute/cast.h"
-#include "arrow/acero/exec_plan.h"
-#include "arrow/acero/options.h"
-#include "arrow/acero/query_context.h"
 #include "arrow/dataset/dataset.h"
 #include "arrow/dataset/dataset_internal.h"
 #include "arrow/dataset/plan.h"

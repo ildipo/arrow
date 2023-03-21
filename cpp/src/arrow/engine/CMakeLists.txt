@@ -50,15 +50,15 @@ add_arrow_lib(arrow_substrait
               arrow_dataset_shared
               substrait
               SHARED_INSTALL_INTERFACE_LIBS
-        ArrowAcero::arrow_acero_shared
-        ArrowDataset::arrow_dataset_shared
+              ArrowAcero::arrow_acero_shared
+              ArrowDataset::arrow_dataset_shared
               STATIC_LINK_LIBS
-        arrow_acero_static
-        arrow_dataset_static
+              arrow_acero_static
+              arrow_dataset_static
               substrait
               STATIC_INSTALL_INTERFACE_LIBS
-        ArrowAcero::arrow_acero_static
-        ArrowDataset::arrow_dataset_static
+              ArrowAcero::arrow_acero_static
+              ArrowDataset::arrow_dataset_static
               PRIVATE_INCLUDES
               ${SUBSTRAIT_INCLUDES})
 
@@ -68,7 +68,8 @@ endforeach()
 
 set(ARROW_SUBSTRAIT_TEST_LINK_LIBS ${ARROW_SUBSTRAIT_LINK_lIBS} ${ARROW_TEST_LINK_LIBS})
 if(ARROW_TEST_LINKAGE STREQUAL "static")
-  list(APPEND ARROW_SUBSTRAIT_TEST_LINK_LIBS arrow_substrait_static arrow_substrait_static)
+  list(APPEND ARROW_SUBSTRAIT_TEST_LINK_LIBS arrow_substrait_static
+       arrow_substrait_static)
 else()
   list(APPEND ARROW_SUBSTRAIT_TEST_LINK_LIBS arrow_substrait_shared)
 endif()

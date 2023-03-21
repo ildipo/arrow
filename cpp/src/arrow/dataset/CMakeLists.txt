@@ -66,7 +66,11 @@ else()
   list(APPEND ARROW_DATASET_SHARED_INSTALL_INTERFACE_LIBS Arrow::arrow_shared)
 endif()
 
-list(APPEND ARROW_DATASET_STATIC_LINK_LIBS arrow_static arrow_acero_static ${ARROW_STATIC_LINK_LIBS})
+list(APPEND
+     ARROW_DATASET_STATIC_LINK_LIBS
+     arrow_static
+     arrow_acero_static
+     ${ARROW_STATIC_LINK_LIBS})
 list(APPEND ARROW_DATASET_SHARED_LINK_LIBS arrow_shared arrow_acero_shared)
 
 add_arrow_lib(arrow_dataset

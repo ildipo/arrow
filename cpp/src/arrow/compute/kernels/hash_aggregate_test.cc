@@ -25,6 +25,9 @@
 #include <utility>
 #include <vector>
 
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/options.h"
+#include "arrow/acero/test_util_internal.h"
 #include "arrow/array.h"
 #include "arrow/array/concatenate.h"
 #include "arrow/chunked_array.h"
@@ -33,9 +36,6 @@
 #include "arrow/compute/api_vector.h"
 #include "arrow/compute/cast.h"
 #include "arrow/compute/exec.h"
-#include "arrow/acero/exec_plan.h"
-#include "arrow/acero/options.h"
-#include "arrow/acero/test_util_internal.h"
 #include "arrow/compute/exec_internal.h"
 #include "arrow/compute/kernels/aggregate_internal.h"
 #include "arrow/compute/kernels/codegen_internal.h"

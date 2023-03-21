@@ -23,35 +23,51 @@ arrow_install_all_headers("arrow/acero")
 #arrow_add_pkg_config("arrow-acero")
 
 set(ARROW_ACERO_SRCS
-      groupby.cc
-      accumulation_queue.cc
-      aggregate_node.cc
-      asof_join_node.cc
-      bloom_filter.cc
-      exec_plan.cc
-      fetch_node.cc
-      filter_node.cc
-      hash_join.cc
-      hash_join_dict.cc
-      hash_join_node.cc
-      map_node.cc
-      options.cc
-      order_by_impl.cc
-      partition_util.cc
-      pivot_longer_node.cc
-      project_node.cc
-      query_context.cc
-      sink_node.cc
-      source_node.cc
-      swiss_join.cc
-      task_util.cc
-      tpch_node.cc
-      union_node.cc
-      util.cc)
+    groupby.cc
+    accumulation_queue.cc
+    aggregate_node.cc
+    asof_join_node.cc
+    bloom_filter.cc
+    exec_plan.cc
+    fetch_node.cc
+    filter_node.cc
+    hash_join.cc
+    hash_join_dict.cc
+    hash_join_node.cc
+    map_node.cc
+    options.cc
+    order_by_impl.cc
+    partition_util.cc
+    pivot_longer_node.cc
+    project_node.cc
+    query_context.cc
+    sink_node.cc
+    source_node.cc
+    swiss_join.cc
+    task_util.cc
+    tpch_node.cc
+    union_node.cc
+    util.cc)
 
 append_avx2_src(bloom_filter_avx2.cc)
 append_avx2_src(swiss_join_avx2.cc)
 append_avx2_src(util_avx2.cc)
+
+set(ARROW_ACERO_SHARED_LINK_LIBS)
+set(ARROW_ACERO_STATIC_LINK_LIBS)
+
+if(ARROW_WITH_OPENTELEMETRY)
+  list(APPEND
+       ARROW_ACERO_SHARED_LINK_LIBS
+       opentelemetry-cpp::trace
+       opentelemetry-cpp::ostream_span_exporter
+       opentelemetry-cpp::otlp_http_exporter)
+  list(APPEND
+       ARROW_ACERO_STATIC_LINK_LIBS
+       opentelemetry-cpp::trace
+       opentelemetry-cpp::ostream_span_exporter
+       opentelemetry-cpp::otlp_http_exporter)
+endif()
 
 add_arrow_lib(arrow_acero
               CMAKE_PACKAGE_NAME
@@ -67,9 +83,11 @@ add_arrow_lib(arrow_acero
               SHARED_LINK_FLAGS
               ${ARROW_VERSION_SCRIPT_FLAGS} # Defined in cpp/arrow/CMakeLists.txt
               SHARED_LINK_LIBS
+              ${ARROW_ACERO_SHARED_LINK_LIBS}
               SHARED_INSTALL_INTERFACE_LIBS
               Arrow::arrow_shared
               STATIC_LINK_LIBS
+              ${ARROW_ACERO_STATIC_LINK_LIBS}
               STATIC_INSTALL_INTERFACE_LIBS
               Arrow::arrow_static)
 
@@ -85,10 +103,10 @@ function(ADD_ARROW_ACERO_TEST REL_TEST_NAME)
   set(one_value_args PREFIX)
   set(multi_value_args LABELS)
   cmake_parse_arguments(ARG
-          "${options}"
-          "${one_value_args}"
-          "${multi_value_args}"
-          ${ARGN})
+                        "${options}"
+                        "${one_value_args}"
+                        "${multi_value_args}"
+                        ${ARGN})
 
   if(ARG_REQUIRE_ALL_KERNELS AND (NOT ARROW_COMPUTE))
     return()
@@ -107,124 +125,117 @@ function(ADD_ARROW_ACERO_TEST REL_TEST_NAME)
   endif()
 
   add_arrow_test(${REL_TEST_NAME}
-          EXTRA_LINK_LIBS
-          ${ARROW_ACERO_TEST_LINK_LIBS}
-          PREFIX
-          ${PREFIX}
-          SOURCES
-          test_util_internal.cc
-          LABELS
-          ${LABELS}
-          ${ARG_UNPARSED_ARGUMENTS})
+                 EXTRA_LINK_LIBS
+                 ${ARROW_ACERO_TEST_LINK_LIBS}
+                 PREFIX
+                 ${PREFIX}
+                 SOURCES
+                 test_util_internal.cc
+                 LABELS
+                 ${LABELS}
+                 ${ARG_UNPARSED_ARGUMENTS})
 endfunction()
 
 add_arrow_acero_test(subtree_test
-        REQUIRE_ALL_KERNELS
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        subtree_test.cc)
-
+                     REQUIRE_ALL_KERNELS
+                     PREFIX
+                     "arrow-acero"
+                     SOURCES
+                     subtree_test.cc)
 add_arrow_acero_test(plan_test
-        REQUIRE_ALL_KERNELS
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        plan_test.cc
-        test_nodes_test.cc
-        test_nodes.cc)
+                     REQUIRE_ALL_KERNELS
+                     PREFIX
+                     "arrow-acero"
+                     SOURCES
+                     plan_test.cc
+                     test_nodes_test.cc
+                     test_nodes.cc)
 add_arrow_acero_test(fetch_node_test
-        REQUIRE_ALL_KERNELS
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        fetch_node_test.cc
-        test_nodes.cc)
+                     REQUIRE_ALL_KERNELS
+                     PREFIX
+                     "arrow-acero"
+                     SOURCES
+                     fetch_node_test.cc
+                     test_nodes.cc)
 add_arrow_acero_test(hash_join_node_test
-        REQUIRE_ALL_KERNELS
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        hash_join_node_test.cc
-        bloom_filter_test.cc)
+                     REQUIRE_ALL_KERNELS
+                     PREFIX
+                     "arrow-acero"
+                     SOURCES
+                     hash_join_node_test.cc
+                     bloom_filter_test.cc)
 add_arrow_acero_test(pivot_longer_node_test
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        pivot_longer_node_test.cc
-        test_nodes.cc)
+                     PREFIX
+                     "arrow-acero"
+                     SOURCES
+                     pivot_longer_node_test.cc
+                     test_nodes.cc)
 add_arrow_acero_test(asof_join_node_test
-        REQUIRE_ALL_KERNELS
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        asof_join_node_test.cc
-        test_nodes.cc)
-add_arrow_acero_test(tpch_node_test
-        PREFIX 
-        "arrow-acero")
-add_arrow_acero_test(union_node_test
-        PREFIX
-        "arrow-acero")
-add_arrow_acero_test(groupby_test
-        REQUIRE_ALL_KERNELS
-        PREFIX "arrow-acero")
+                     REQUIRE_ALL_KERNELS
+                     PREFIX
+                     "arrow-acero"
+                     SOURCES
+                     asof_join_node_test.cc
+                     test_nodes.cc)
+add_arrow_acero_test(tpch_node_test PREFIX "arrow-acero")
+add_arrow_acero_test(union_node_test PREFIX "arrow-acero")
+add_arrow_acero_test(groupby_test REQUIRE_ALL_KERNELS PREFIX "arrow-acero")
 add_arrow_acero_test(util_test
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        util_test.cc
-        task_util_test.cc)
+                     PREFIX
+                     "arrow-acero"
+                     SOURCES
+                     util_test.cc
+                     task_util_test.cc)
 
 if(ARROW_BUILD_BENCHMARKS)
   add_arrow_benchmark(expression_benchmark
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        test_util_internal.cc)
+                      PREFIX
+                      "arrow-acero"
+                      SOURCES
+                      test_util_internal.cc)
 
   add_arrow_benchmark(filter_benchmark
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        benchmark_util.cc
-        filter_benchmark.cc
-        SOURCES
-        test_util_internal.cc)
+                      PREFIX
+                      "arrow-acero"
+                      SOURCES
+                      benchmark_util.cc
+                      filter_benchmark.cc
+                      SOURCES
+                      test_util_internal.cc)
 
   add_arrow_benchmark(project_benchmark
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        benchmark_util.cc
-        project_benchmark.cc
-        SOURCES
-        test_util_internal.cc)
+                      PREFIX
+                      "arrow-acero"
+                      SOURCES
+                      benchmark_util.cc
+                      project_benchmark.cc
+                      SOURCES
+                      test_util_internal.cc)
 
   add_arrow_benchmark(asof_join_benchmark
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        test_util_internal.cc)
+                      PREFIX
+                      "arrow-acero"
+                      SOURCES
+                      test_util_internal.cc)
 
   add_arrow_benchmark(tpch_benchmark
-        PREFIX
-        "arrow-acero"
-        SOURCES
-        test_util_internal.cc)
+                      PREFIX
+                      "arrow-acero"
+                      SOURCES
+                      test_util_internal.cc)
 
   if(ARROW_BUILD_OPENMP_BENCHMARKS)
     find_package(OpenMP REQUIRED)
     add_arrow_benchmark(hash_join_benchmark
-          PREFIX
-          "arrow-acero"
-          EXTRA_LINK_LIBS
-          OpenMP::OpenMP_CXX
-          SOURCES
-          test_util_internal.cc)
+                        PREFIX
+                        "arrow-acero"
+                        EXTRA_LINK_LIBS
+                        OpenMP::OpenMP_CXX
+                        SOURCES
+                        test_util_internal.cc)
     if(MSVC)
       target_compile_options(arrow-compute-hash-join-benchmark
-              PRIVATE "-openmp:experimental -openmp:llvm")
+                             PRIVATE "-openmp:experimental -openmp:llvm")
     endif()
   endif()
 

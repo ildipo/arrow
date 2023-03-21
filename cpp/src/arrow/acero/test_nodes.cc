@@ -23,10 +23,10 @@
 #include <string>
 #include <vector>
 
-#include "arrow/api.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/query_context.h"
 #include "arrow/acero/util.h"
+#include "arrow/api.h"
 #include "arrow/io/interfaces.h"
 #include "arrow/testing/random.h"
 #include "arrow/util/checked_cast.h"

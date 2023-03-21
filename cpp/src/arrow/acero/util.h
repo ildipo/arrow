@@ -24,9 +24,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "arrow/buffer.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/type_fwd.h"
+#include "arrow/buffer.h"
 #include "arrow/compute/expression.h"
 #include "arrow/compute/util.h"
 #include "arrow/memory_pool.h"

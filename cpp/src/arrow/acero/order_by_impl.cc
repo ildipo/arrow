@@ -21,8 +21,8 @@
 #include <memory>
 #include <mutex>
 #include <vector>
-#include "arrow/compute/api_vector.h"
 #include "arrow/acero/options.h"
+#include "arrow/compute/api_vector.h"
 #include "arrow/record_batch.h"
 #include "arrow/result.h"
 #include "arrow/status.h"

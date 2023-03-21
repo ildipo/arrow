@@ -20,10 +20,10 @@
 #include <memory>
 #include <vector>
 
-#include "arrow/compute/api_aggregate.h"
-#include "arrow/compute/exec.h"
 #include "arrow/acero/exec_plan.h"
 #include "arrow/acero/options.h"
+#include "arrow/compute/api_aggregate.h"
+#include "arrow/compute/exec.h"
 #include "arrow/compute/kernel.h"
 #include "arrow/datum.h"
 #include "arrow/result.h"

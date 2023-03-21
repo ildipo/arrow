@@ -26,7 +26,7 @@ if(ARROW_COMPUTE)
     set(ENGINE_ACERO_EXAMPLE_LINK_LIBS arrow_acero_static)
   endif()
   add_arrow_example(compute_register_example EXTRA_LINK_LIBS
-          ${ENGINE_ACERO_EXAMPLE_LINK_LIBS})
+                    ${ENGINE_ACERO_EXAMPLE_LINK_LIBS})
 endif()
 
 if(ARROW_SUBSTRAIT)

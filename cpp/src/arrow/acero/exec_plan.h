@@ -26,9 +26,9 @@
 #include <utility>
 #include <vector>
 
+#include "arrow/acero/type_fwd.h"
 #include "arrow/compute/api_vector.h"
 #include "arrow/compute/exec.h"
-#include "arrow/acero/type_fwd.h"
 #include "arrow/compute/ordering.h"
 #include "arrow/type_fwd.h"
 #include "arrow/util/future.h"

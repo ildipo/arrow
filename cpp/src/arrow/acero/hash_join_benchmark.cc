@@ -17,12 +17,12 @@
 
 #include "benchmark/benchmark.h"
 
-#include "arrow/api.h"
 #include "arrow/acero/hash_join.h"
 #include "arrow/acero/hash_join_node.h"
 #include "arrow/acero/options.h"
 #include "arrow/acero/test_util_internal.h"
 #include "arrow/acero/util.h"
+#include "arrow/api.h"
 #include "arrow/compute/kernels/row_encoder_internal.h"
 #include "arrow/testing/random.h"
 #include "arrow/util/thread_pool.h"

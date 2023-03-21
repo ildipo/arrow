@@ -165,6 +165,8 @@ class build_ext(_build_ext):
             os.environ.get('PYARROW_WITH_SUBSTRAIT', '0'))
         self.with_flight = strtobool(
             os.environ.get('PYARROW_WITH_FLIGHT', '0'))
+        self.with_acero = strtobool(
+            os.environ.get('PYARROW_WITH_ACERO', '0'))
         self.with_dataset = strtobool(
             os.environ.get('PYARROW_WITH_DATASET', '0'))
         self.with_parquet = strtobool(
@@ -276,6 +278,7 @@ class build_ext(_build_ext):
             append_cmake_bool(self.with_substrait, 'PYARROW_BUILD_SUBSTRAIT')
             append_cmake_bool(self.with_flight, 'PYARROW_BUILD_FLIGHT')
             append_cmake_bool(self.with_gandiva, 'PYARROW_BUILD_GANDIVA')
+            append_cmake_bool(self.with_acero, 'PYARROW_BUILD_ACERO')
             append_cmake_bool(self.with_dataset, 'PYARROW_BUILD_DATASET')
             append_cmake_bool(self.with_orc, 'PYARROW_BUILD_ORC')
             append_cmake_bool(self.with_parquet, 'PYARROW_BUILD_PARQUET')
@@ -360,6 +363,10 @@ class build_ext(_build_ext):
         if name == '_hdfs' and not self.with_hdfs:
             return True
         if name == '_dataset' and not self.with_dataset:
+            return True
+        if name == '_acero' and not self.with_acero:
+            return True
+        if name == '_exec_plan' and not self.with_acero:
             return True
         if name == '_dataset_orc' and not (
                 self.with_orc and self.with_dataset

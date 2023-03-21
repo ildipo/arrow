@@ -113,6 +113,7 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
   option(PYARROW_BUILD_CUDA "Build the PyArrow CUDA support" OFF)
   option(PYARROW_BUILD_FLIGHT "Build the PyArrow Flight integration" OFF)
   option(PYARROW_BUILD_SUBSTRAIT "Build the PyArrow Substrait integration" OFF)
+  option(PYARROW_BUILD_ACERO "Build the PyArrow Acero integration" OFF)
   option(PYARROW_BUILD_DATASET "Build the PyArrow Dataset integration" OFF)
   option(PYARROW_BUILD_GANDIVA "Build the PyArrow Gandiva integration" OFF)
   option(PYARROW_BUILD_PARQUET "Build the PyArrow Parquet integration" OFF)
@@ -306,6 +307,18 @@ if(PYARROW_BUILD_DATASET)
     list(APPEND PYARROW_CPP_LINK_LIBS ArrowDataset::arrow_dataset_shared)
   else()
     list(APPEND PYARROW_CPP_LINK_LIBS ArrowDataset::arrow_dataset_static)
+  endif()
+endif()
+
+if(PYARROW_BUILD_ACERO)
+  if(NOT ARROW_ACERO)
+    message(FATAL_ERROR "You must build Arrow C++ with ARROW_ACERO=ON")
+  endif()
+  find_package(ArrowAcero REQUIRED)
+  if(ARROW_BUILD_SHARED)
+    list(APPEND PYARROW_CPP_LINK_LIBS ArrowAcero::arrow_acero_shared)
+  else()
+    list(APPEND PYARROW_CPP_LINK_LIBS ArrowAcero::arrow_acero_static)
   endif()
 endif()
 
@@ -520,8 +533,6 @@ set(CYTHON_EXTENSIONS
     lib
     _compute
     _csv
-    _exec_plan
-    _acero
     _feather
     _fs
     _hdfsio
@@ -559,6 +570,19 @@ if(PYARROW_BUILD_CUDA)
   set(CUDA_LINK_LIBS ArrowCUDA::arrow_cuda_shared)
   list(APPEND CYTHON_EXTENSIONS _cuda)
   set_source_files_properties(pyarrow/_cuda.pyx PROPERTIES CYTHON_API TRUE)
+endif()
+
+# Acero
+if(PYARROW_BUILD_ACERO)
+  if(PYARROW_BUNDLE_ARROW_CPP)
+    bundle_arrow_lib(${ARROW_ACERO_SHARED_LIB} SO_VERSION ${ARROW_SO_VERSION})
+    if(MSVC)
+      bundle_arrow_import_lib(${ARROW_ACERO_IMPORT_LIB})
+    endif()
+  endif()
+
+  set(DATASET_LINK_LIBS ArrowAcero::arrow_acero_shared)
+  list(APPEND CYTHON_EXTENSIONS _acero _exec_plan)
 endif()
 
 # Dataset

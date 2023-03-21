@@ -26,6 +26,7 @@ from cython.operator cimport dereference as deref, preincrement as inc
 
 from pyarrow.includes.common cimport *
 from pyarrow.includes.libarrow cimport *
+from pyarrow.includes.libarrow_acero cimport *
 from pyarrow.includes.libarrow_dataset cimport *
 from pyarrow.lib cimport Table, check_status, pyarrow_unwrap_table, pyarrow_wrap_table
 from pyarrow.lib import tobytes

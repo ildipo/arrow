@@ -38,7 +38,7 @@
 #include <arrow/dataset/type_fwd.h>
 #endif
 
-#include <arrow/compute/exec/options.h>
+#include <arrow/acero/options.h>
 
 #include <arrow/filesystem/type_fwd.h>
 #include <arrow/io/type_fwd.h>

@@ -33,8 +33,8 @@
 #include <arrow-glib/schema.hpp>
 #include <arrow-glib/table.hpp>
 
-#include <arrow/compute/exec/exec_plan.h>
-#include <arrow/compute/exec/options.h>
+#include <arrow/acero/exec_plan.h>
+#include <arrow/acero/options.h>
 
 template <typename ArrowType, typename GArrowArrayType>
 typename ArrowType::c_type

@@ -19,45 +19,37 @@ import pytest
 
 import pyarrow as pa
 import pyarrow.compute as pc
+import pyarrow.acero as ac
 from pyarrow.compute import field
 import pyarrow.dataset as ds
-
-from pyarrow._acero import (
-    TableSourceNodeOptions,
-    FilterNodeOptions,
-    ProjectNodeOptions,
-    AggregateNodeOptions,
-    HashJoinNodeOptions,
-    Declaration,
-)
 from pyarrow._dataset import ScanNodeOptions
 
 
 @pytest.fixture
 def table_source():
     table = pa.table({'a': [1, 2, 3], 'b': [4, 5, 6]})
-    table_opts = TableSourceNodeOptions(table)
-    table_source = Declaration("table_source", options=table_opts)
+    table_opts = ac.TableSourceNodeOptions(table)
+    table_source = ac.Declaration("table_source", options=table_opts)
     return table_source
 
 
 def test_declaration():
 
     table = pa.table({'a': [1, 2, 3], 'b': [4, 5, 6]})
-    table_opts = TableSourceNodeOptions(table)
-    filter_opts = FilterNodeOptions(field('a') > 1)
+    table_opts = ac.TableSourceNodeOptions(table)
+    filter_opts = ac.FilterNodeOptions(field('a') > 1)
 
     # using sequence
-    decl = Declaration.from_sequence([
-        Declaration("table_source", options=table_opts),
-        Declaration("filter", options=filter_opts)
+    decl = ac.Declaration.from_sequence([
+        ac.Declaration("table_source", options=table_opts),
+        ac.Declaration("filter", options=filter_opts)
     ])
     result = decl.to_table()
     assert result.equals(table.slice(1, 2))
 
     # using explicit inputs
-    table_source = Declaration("table_source", options=table_opts)
-    filtered = Declaration("filter", options=filter_opts, inputs=[table_source])
+    table_source = ac.Declaration("table_source", options=table_opts)
+    filtered = ac.Declaration("filter", options=filter_opts, inputs=[table_source])
     result = filtered.to_table()
     assert result.equals(table.slice(1, 2))
 
@@ -78,10 +70,10 @@ def test_declaration_to_reader(table_source):
 
 def test_table_source():
     with pytest.raises(TypeError):
-        TableSourceNodeOptions(pa.record_batch([pa.array([1, 2, 3])], ["a"]))
+        ac.TableSourceNodeOptions(pa.record_batch([pa.array([1, 2, 3])], ["a"]))
 
-    table_source = TableSourceNodeOptions(None)
-    decl = Declaration("table_source", table_source)
+    table_source = ac.TableSourceNodeOptions(None)
+    decl = ac.Declaration("table_source", table_source)
     with pytest.raises(
         ValueError, match="TableSourceNode requires table which is not null"
     ):
@@ -90,34 +82,34 @@ def test_table_source():
 
 def test_filter(table_source):
     # referencing unknown field
-    decl = Declaration.from_sequence([
+    decl = ac.Declaration.from_sequence([
         table_source,
-        Declaration("filter", options=FilterNodeOptions(field("c") > 1))
+        ac.Declaration("filter", options=ac.FilterNodeOptions(field("c") > 1))
     ])
     with pytest.raises(ValueError, match=r"No match for FieldRef.Name\(c\)"):
         _ = decl.to_table()
 
     # requires a pyarrow Expression
     with pytest.raises(TypeError):
-        FilterNodeOptions(pa.array([True, False, True]))
+        ac.FilterNodeOptions(pa.array([True, False, True]))
     with pytest.raises(TypeError):
-        FilterNodeOptions(None)
+        ac.FilterNodeOptions(None)
 
 
 def test_project(table_source):
     # default name from expression
-    decl = Declaration.from_sequence([
+    decl = ac.Declaration.from_sequence([
         table_source,
-        Declaration("project", ProjectNodeOptions([pc.multiply(field("a"), 2)]))
+        ac.Declaration("project", ac.ProjectNodeOptions([pc.multiply(field("a"), 2)]))
     ])
     result = decl.to_table()
     assert result.schema.names == ["multiply(a, 2)"]
     assert result[0].to_pylist() == [2, 4, 6]
 
     # provide name
-    decl = Declaration.from_sequence([
+    decl = ac.Declaration.from_sequence([
         table_source,
-        Declaration("project", ProjectNodeOptions([pc.multiply(field("a"), 2)], ["a2"]))
+        ac.Declaration("project", ac.ProjectNodeOptions([pc.multiply(field("a"), 2)], ["a2"]))
     ])
     result = decl.to_table()
     assert result.schema.names == ["a2"]
@@ -125,21 +117,21 @@ def test_project(table_source):
 
     # input validation
     with pytest.raises(ValueError):
-        ProjectNodeOptions([pc.multiply(field("a"), 2)], ["a2", "b2"])
+        ac.ProjectNodeOptions([pc.multiply(field("a"), 2)], ["a2", "b2"])
 
     # no scalar expression
-    decl = Declaration.from_sequence([
+    decl = ac.Declaration.from_sequence([
         table_source,
-        Declaration("project", ProjectNodeOptions([pc.sum(field("a"))]))
+        ac.Declaration("project", ac.ProjectNodeOptions([pc.sum(field("a"))]))
     ])
     with pytest.raises(ValueError, match="cannot Execute non-scalar expression"):
         _ = decl.to_table()
 
 
 def test_aggregate_scalar(table_source):
-    decl = Declaration.from_sequence([
+    decl = ac.Declaration.from_sequence([
         table_source,
-        Declaration("aggregate", AggregateNodeOptions([("a", "sum", None, "a_sum")]))
+        ac.Declaration("aggregate", ac.AggregateNodeOptions([("a", "sum", None, "a_sum")]))
     ])
     result = decl.to_table()
     assert result.schema.names == ["a_sum"]
@@ -147,12 +139,12 @@ def test_aggregate_scalar(table_source):
 
     # with options class
     table = pa.table({'a': [1, 2, None]})
-    aggr_opts = AggregateNodeOptions(
+    aggr_opts = ac.AggregateNodeOptions(
         [("a", "sum", pc.ScalarAggregateOptions(skip_nulls=False), "a_sum")]
     )
-    decl = Declaration.from_sequence([
-        Declaration("table_source", TableSourceNodeOptions(table)),
-        Declaration("aggregate", aggr_opts),
+    decl = ac.Declaration.from_sequence([
+        ac.Declaration("table_source", ac.TableSourceNodeOptions(table)),
+        ac.Declaration("aggregate", aggr_opts),
     ])
     result = decl.to_table()
     assert result.schema.names == ["a_sum"]
@@ -160,18 +152,18 @@ def test_aggregate_scalar(table_source):
 
     # test various ways of specifying the target column
     for target in ["a", field("a"), 0, field(0), ["a"], [field("a")], [0]]:
-        aggr_opts = AggregateNodeOptions([(target, "sum", None, "a_sum")])
-        decl = Declaration.from_sequence(
-            [table_source, Declaration("aggregate", aggr_opts)]
+        aggr_opts = ac.AggregateNodeOptions([(target, "sum", None, "a_sum")])
+        decl = ac.Declaration.from_sequence(
+            [table_source, ac.Declaration("aggregate", aggr_opts)]
         )
         result = decl.to_table()
         assert result.schema.names == ["a_sum"]
         assert result["a_sum"].to_pylist() == [6]
 
     # proper error when specifying the wrong number of target columns
-    aggr_opts = AggregateNodeOptions([(["a", "b"], "sum", None, "a_sum")])
-    decl = Declaration.from_sequence(
-        [table_source, Declaration("aggregate", aggr_opts)]
+    aggr_opts = ac.AggregateNodeOptions([(["a", "b"], "sum", None, "a_sum")])
+    decl = ac.Declaration.from_sequence(
+        [table_source, ac.Declaration("aggregate", aggr_opts)]
     )
     with pytest.raises(
         ValueError, match="Function 'sum' accepts 1 arguments but 2 passed"
@@ -179,9 +171,9 @@ def test_aggregate_scalar(table_source):
         _ = decl.to_table()
 
     # proper error when using hash aggregation without keys
-    aggr_opts = AggregateNodeOptions([("a", "hash_sum", None, "a_sum")])
-    decl = Declaration.from_sequence(
-        [table_source, Declaration("aggregate", aggr_opts)]
+    aggr_opts = ac.AggregateNodeOptions([("a", "hash_sum", None, "a_sum")])
+    decl = ac.Declaration.from_sequence(
+        [table_source, ac.Declaration("aggregate", aggr_opts)]
     )
     with pytest.raises(ValueError, match="is a hash aggregate function"):
         _ = decl.to_table()
@@ -189,45 +181,45 @@ def test_aggregate_scalar(table_source):
 
 def test_aggregate_hash():
     table = pa.table({'a': [1, 2, None], 'b': ["foo", "bar", "foo"]})
-    table_opts = TableSourceNodeOptions(table)
-    table_source = Declaration("table_source", options=table_opts)
+    table_opts = ac.TableSourceNodeOptions(table)
+    table_source = ac.Declaration("table_source", options=table_opts)
 
     # default options
-    aggr_opts = AggregateNodeOptions(
+    aggr_opts = ac.AggregateNodeOptions(
         [("a", "hash_count", None, "count(a)")], keys=["b"])
-    decl = Declaration.from_sequence([
-        table_source, Declaration("aggregate", aggr_opts)
+    decl = ac.Declaration.from_sequence([
+        table_source, ac.Declaration("aggregate", aggr_opts)
     ])
     result = decl.to_table()
     expected = pa.table({"count(a)": [1, 1], "b": ["foo", "bar"]})
     assert result.equals(expected)
 
     # specify function options
-    aggr_opts = AggregateNodeOptions(
+    aggr_opts = ac.AggregateNodeOptions(
         [("a", "hash_count", pc.CountOptions("all"), "count(a)")], keys=["b"]
     )
-    decl = Declaration.from_sequence([
-        table_source, Declaration("aggregate", aggr_opts)
+    decl = ac.Declaration.from_sequence([
+        table_source, ac.Declaration("aggregate", aggr_opts)
     ])
     result = decl.to_table()
     expected_all = pa.table({"count(a)": [2, 1], "b": ["foo", "bar"]})
     assert result.equals(expected_all)
 
     # specify keys as field references
-    aggr_opts = AggregateNodeOptions(
+    aggr_opts = ac.AggregateNodeOptions(
         [("a", "hash_count", None, "count(a)")], keys=[field("b")]
     )
-    decl = Declaration.from_sequence([
-        table_source, Declaration("aggregate", aggr_opts)
+    decl = ac.Declaration.from_sequence([
+        table_source, ac.Declaration("aggregate", aggr_opts)
     ])
     result = decl.to_table()
     assert result.equals(expected)
 
     # wrong type of (aggregation) function
     # TODO test with kernel that matches number of arguments (arity) -> avoid segfault
-    aggr_opts = AggregateNodeOptions([("a", "sum", None, "a_sum")], keys=["b"])
-    decl = Declaration.from_sequence([
-        table_source, Declaration("aggregate", aggr_opts)
+    aggr_opts = ac.AggregateNodeOptions([("a", "sum", None, "a_sum")], keys=["b"])
+    decl = ac.Declaration.from_sequence([
+        table_source, ac.Declaration("aggregate", aggr_opts)
     ])
     with pytest.raises(ValueError):
         _ = decl.to_table()
@@ -235,13 +227,13 @@ def test_aggregate_hash():
 
 def test_hash_join():
     left = pa.table({'key': [1, 2, 3], 'a': [4, 5, 6]})
-    left_source = Declaration("table_source", options=TableSourceNodeOptions(left))
+    left_source = ac.Declaration("table_source", options=ac.TableSourceNodeOptions(left))
     right = pa.table({'key': [2, 3, 4], 'b': [4, 5, 6]})
-    right_source = Declaration("table_source", options=TableSourceNodeOptions(right))
+    right_source = ac.Declaration("table_source", options=ac.TableSourceNodeOptions(right))
 
     # inner join
-    join_opts = HashJoinNodeOptions("inner", left_keys="key", right_keys="key")
-    joined = Declaration(
+    join_opts = ac.HashJoinNodeOptions("inner", left_keys="key", right_keys="key")
+    joined = ac.Declaration(
         "hashjoin", options=join_opts, inputs=[left_source, right_source])
     result = joined.to_table()
     expected = pa.table(
@@ -250,16 +242,16 @@ def test_hash_join():
     assert result.equals(expected)
 
     for keys in [field("key"), ["key"], [field("key")]]:
-        join_opts = HashJoinNodeOptions("inner", left_keys=keys, right_keys=keys)
-        joined = Declaration(
+        join_opts = ac.HashJoinNodeOptions("inner", left_keys=keys, right_keys=keys)
+        joined = ac.Declaration(
             "hashjoin", options=join_opts, inputs=[left_source, right_source])
         result = joined.to_table()
         assert result.equals(expected)
 
     # left join
-    join_opts = HashJoinNodeOptions(
+    join_opts = ac.HashJoinNodeOptions(
         "left outer", left_keys="key", right_keys="key")
-    joined = Declaration(
+    joined = ac.Declaration(
         "hashjoin", options=join_opts, inputs=[left_source, right_source])
     result = joined.to_table()
     expected = pa.table(
@@ -269,10 +261,10 @@ def test_hash_join():
     assert result.sort_by("a").equals(expected)
 
     # suffixes
-    join_opts = HashJoinNodeOptions(
+    join_opts = ac.HashJoinNodeOptions(
         "left outer", left_keys="key", right_keys="key",
         output_suffix_for_left="_left", output_suffix_for_right="_right")
-    joined = Declaration(
+    joined = ac.Declaration(
         "hashjoin", options=join_opts, inputs=[left_source, right_source])
     result = joined.to_table()
     expected = pa.table(
@@ -282,10 +274,10 @@ def test_hash_join():
     assert result.sort_by("a").equals(expected)
 
     # manually specifying output columns
-    join_opts = HashJoinNodeOptions(
+    join_opts = ac.HashJoinNodeOptions(
         "left outer", left_keys="key", right_keys="key",
         left_output=["key", "a"], right_output=[field("b")])
-    joined = Declaration(
+    joined = ac.Declaration(
         "hashjoin", options=join_opts, inputs=[left_source, right_source])
     result = joined.to_table()
     expected = pa.table(
@@ -299,7 +291,7 @@ def test_scan(tempdir):
     table = pa.table({'a': [1, 2, 3], 'b': [4, 5, 6]})
     ds.write_dataset(table, tempdir / "dataset", format="parquet")
     dataset = ds.dataset(tempdir / "dataset", format="parquet")
-    decl = Declaration("scan", ScanNodeOptions(dataset))
+    decl = ac.Declaration("scan", ScanNodeOptions(dataset))
     result = decl.to_table()
     assert result.schema.names == [
         "a", "b", "__fragment_index", "__batch_index",
@@ -310,19 +302,19 @@ def test_scan(tempdir):
     # using a filter only does pushdown (depending on file format), not actual filter
 
     scan_opts = ScanNodeOptions(dataset, filter=field('a') > 1)
-    decl = Declaration("scan", scan_opts)
+    decl = ac.Declaration("scan", scan_opts)
     # fragment not filtered based on min/max statistics
     assert decl.to_table().num_rows == 3
 
     scan_opts = ScanNodeOptions(dataset, filter=field('a') > 4)
-    decl = Declaration("scan", scan_opts)
+    decl = ac.Declaration("scan", scan_opts)
     # full fragment filtered based on min/max statistics
     assert decl.to_table().num_rows == 0
 
     # projection scan option
 
     scan_opts = ScanNodeOptions(dataset, columns={"a2": pc.multiply(field("a"), 2)})
-    decl = Declaration("scan", scan_opts)
+    decl = ac.Declaration("scan", scan_opts)
     result = decl.to_table()
     # "a" is included in the result (needed later on for the actual projection)
     assert result["a"].to_pylist() == [1, 2, 3]

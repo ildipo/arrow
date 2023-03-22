@@ -119,6 +119,7 @@ UnionMode_SPARSE = _UnionMode_SPARSE
 UnionMode_DENSE = _UnionMode_DENSE
 
 __pc = None
+__pa = None
 
 
 def _pc():
@@ -132,6 +133,14 @@ def _pc():
             pass
         __pc = pc
     return __pc
+
+
+def _pa():
+    global __pa
+    if __pa is None:
+        import pyarrow.acero as pa
+        __pa = pa
+    return __pa
 
 
 def _gdb_test_session():

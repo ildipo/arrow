@@ -113,7 +113,8 @@ def test_project(table_source):
     # provide name
     decl = ac.Declaration.from_sequence([
         table_source,
-        ac.Declaration("project", ac.ProjectNodeOptions([pc.multiply(field("a"), 2)], ["a2"]))
+        ac.Declaration("project", ac.ProjectNodeOptions(
+            [pc.multiply(field("a"), 2)], ["a2"]))
     ])
     result = decl.to_table()
     assert result.schema.names == ["a2"]
@@ -135,7 +136,8 @@ def test_project(table_source):
 def test_aggregate_scalar(table_source):
     decl = ac.Declaration.from_sequence([
         table_source,
-        ac.Declaration("aggregate", ac.AggregateNodeOptions([("a", "sum", None, "a_sum")]))
+        ac.Declaration("aggregate", ac.AggregateNodeOptions(
+            [("a", "sum", None, "a_sum")]))
     ])
     result = decl.to_table()
     assert result.schema.names == ["a_sum"]
@@ -268,9 +270,11 @@ def test_order_by():
 
 def test_hash_join():
     left = pa.table({'key': [1, 2, 3], 'a': [4, 5, 6]})
-    left_source = ac.Declaration("table_source", options=ac.TableSourceNodeOptions(left))
+    left_source = ac.Declaration(
+        "table_source", options=ac.TableSourceNodeOptions(left))
     right = pa.table({'key': [2, 3, 4], 'b': [4, 5, 6]})
-    right_source = ac.Declaration("table_source", options=ac.TableSourceNodeOptions(right))
+    right_source = ac.Declaration(
+        "table_source", options=ac.TableSourceNodeOptions(right))
 
     # inner join
     join_opts = ac.HashJoinNodeOptions("inner", left_keys="key", right_keys="key")

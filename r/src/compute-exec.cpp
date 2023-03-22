@@ -18,9 +18,9 @@
 #include "./arrow_types.h"
 #include "./safe-call-into-r.h"
 
+#include <arrow/acero/exec_plan.h>
 #include <arrow/buffer.h>
 #include <arrow/compute/api.h>
-#include <arrow/acero/exec_plan.h>
 #include <arrow/compute/expression.h>
 #include <arrow/table.h>
 #include <arrow/util/async_generator.h>

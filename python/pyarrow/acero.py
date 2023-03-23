@@ -24,4 +24,5 @@ from pyarrow._acero import (  # noqa
     AggregateNodeOptions,
     HashJoinNodeOptions,
     Declaration,
+    OrderByNodeOptions,
 )

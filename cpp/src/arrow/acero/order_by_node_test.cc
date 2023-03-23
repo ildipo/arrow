@@ -19,9 +19,9 @@
 
 #include <gmock/gmock-matchers.h>
 
-#include "arrow/compute/exec/exec_plan.h"
-#include "arrow/compute/exec/options.h"
-#include "arrow/compute/exec/test_nodes.h"
+#include "arrow/acero/exec_plan.h"
+#include "arrow/acero/options.h"
+#include "arrow/acero/test_nodes.h"
 #include "arrow/table.h"
 #include "arrow/testing/generator.h"
 #include "arrow/testing/gtest_util.h"

@@ -77,6 +77,9 @@ cdef extern from "arrow/acero/options.h" namespace "arrow::compute" nogil:
         COrderBySinkNodeOptions(vector[CSortOptions] options,
                                 CAsyncExecBatchGenerator generator)
 
+    cdef cppclass COrderByNodeOptions "arrow::compute::OrderByNodeOptions"(CExecNodeOptions):
+        COrderByNodeOptions(COrdering ordering)
+
     cdef cppclass CHashJoinNodeOptions "arrow::compute::HashJoinNodeOptions"(CExecNodeOptions):
         CHashJoinNodeOptions(CJoinType, vector[CFieldRef] in_left_keys,
                              vector[CFieldRef] in_right_keys)

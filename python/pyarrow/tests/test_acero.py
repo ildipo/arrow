@@ -236,26 +236,30 @@ def test_order_by():
     table_source = ac.Declaration("table_source", ac.TableSourceNodeOptions(table))
 
     ord_opts = ac.OrderByNodeOptions([("b", "ascending")])
-    decl = ac.Declaration.from_sequence([table_source, ac.Declaration("order_by", ord_opts)])
+    decl = ac.Declaration.from_sequence(
+        [table_source, ac.Declaration("order_by", ord_opts)])
     result = decl.to_table()
     expected = pa.table({"a": [1, 4, 2, 3], "b": [1, 2, 3, None]})
     assert result.equals(expected)
 
     ord_opts = ac.OrderByNodeOptions([(field("b"), "descending")])
-    decl = ac.Declaration.from_sequence([table_source, ac.Declaration("order_by", ord_opts)])
+    decl = ac.Declaration.from_sequence(
+        [table_source, ac.Declaration("order_by", ord_opts)])
     result = decl.to_table()
     expected = pa.table({"a": [2, 4, 1, 3], "b": [3, 2, 1, None]})
     assert result.equals(expected)
 
     ord_opts = ac.OrderByNodeOptions([(1, "descending")], null_placement="at_start")
-    decl = ac.Declaration.from_sequence([table_source, ac.Declaration("order_by", ord_opts)])
+    decl = ac.Declaration.from_sequence(
+        [table_source, ac.Declaration("order_by", ord_opts)])
     result = decl.to_table()
     expected = pa.table({"a": [3, 2, 4, 1], "b": [None, 3, 2, 1]})
     assert result.equals(expected)
 
     # emtpy ordering
     ord_opts = ac.OrderByNodeOptions([])
-    decl = ac.Declaration.from_sequence([table_source, ac.Declaration("order_by", ord_opts)])
+    decl = ac.Declaration.from_sequence(
+        [table_source, ac.Declaration("order_by", ord_opts)])
     with pytest.raises(
         ValueError, match="`ordering` must be an explicit non-empty ordering"
     ):
